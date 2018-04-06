@@ -10,7 +10,6 @@ import UIKit
 
 class ViewController: UIViewController, UITextFieldDelegate {
 
-    
     @IBOutlet weak var textField1: UITextField!
     @IBOutlet weak var frame10LabelTS: UILabel!
     @IBOutlet weak var frame10Label3: UILabel!
@@ -45,6 +44,10 @@ class ViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var frame1Label1: UILabel!
     @IBOutlet weak var enterButton1: UIButton!
     @IBOutlet weak var testLabel: UILabel!
+    @IBOutlet weak var playAgainButton: UIButton!
+    @IBOutlet weak var resetHighScores: UIButton!
+    @IBOutlet weak var resetNoButton: UIButton!
+    @IBOutlet weak var resetYesButton: UIButton!
     
     private var firstScoreLabelsArray = [UILabel]()
     private var secondScoreLabelsArray = [UILabel]()
@@ -52,7 +55,6 @@ class ViewController: UIViewController, UITextFieldDelegate {
     
     var highScoresArray = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     var tempScoresArray = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-    
     var frameFirstScore = [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]]
     var gameNumber = 1
     var gameScores = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
@@ -77,16 +79,6 @@ class ViewController: UIViewController, UITextFieldDelegate {
     var isGameOver = false
     var highGameScore = 0
     
-    @IBOutlet weak var playAgainButton: UIButton!
-    
-    @IBOutlet weak var resetHighScores: UIButton!
-    
-    @IBOutlet weak var resetNoButton: UIButton!
-    
-    
-    @IBOutlet weak var resetYesButton: UIButton!
-    
-    
     @IBAction func resetYesBtnPressed(_ sender: Any) {
         testLabel.text = ""
         testLabel.alpha = 0
@@ -107,8 +99,6 @@ class ViewController: UIViewController, UITextFieldDelegate {
         playAgainButton.alpha = 1
     }
     
-    
-    
     @IBAction func resetHighScoresButton(_ sender: Any) {
         testLabel.alpha = 1
         testLabel.text = "ARE YOU SURE YOU WANT TO DELETE YOUR HIGH SCORES?"
@@ -117,6 +107,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
         resetNoButton.alpha = 1
         playAgainButton.alpha = 0
     }
+    
     @IBAction func playAgainButtonPressed(_ sender: Any) {
         
         testLabel.text = ""
@@ -132,99 +123,101 @@ class ViewController: UIViewController, UITextFieldDelegate {
         resetHighScores.alpha = 0
     }
     
+    //pressButton1 is the "Enter Score" button
+    
     @IBAction func pressButton1(_ sender: Any) {
   
         self.textField1.resignFirstResponder()
-         let testNum = Int(textField1.text!)
-         if let num1 = testNum {
+        let testNum = Int(textField1.text!)
+        if let num1 = testNum {
             textField1.text = ""
- if (!isGameOver && (num1 > 10-prevRoll || num1 < 0)) {
-        testLabel.alpha = 1
-         testLabel.text = "Score must be a number between 0 and \(10-prevRoll). Try again."
-    } else if (!isGameOver) {
-         testLabel.text = ""
-        testLabel.alpha = 0
-    if (i==10) {
-        tenthFrame(num1: num1)
-    } else {
-        if  num1 == 10 {
-            if (!secondRoll) {
-                frameFirstScore[i-1][0] = 10
-              if (isStrikeA && isStrikeB) {
-                    frameFirstScore[i-2][1] = 10
-                    frameFirstScore[i-3][2] = 10
-                printTotal(frame: i-2)
-                 } else if (isStrikeA) {
-                        isStrikeB = true
-                    frameFirstScore[i-2][1] = 10
-                 } else if (isSpare) {
-                            frameFirstScore[i-2][2] = 10
-                            isSpare = false
-                    printTotal(frame: i-1)
-                    isStrikeA = true
-              } else {
-                isStrikeA = true
-                }
-                    displayStrike(frame: i)
-            } else { //num is 10, and is a spare in second box
-                frameFirstScore[i-1][1] = 10
-                isSpare = true
-                displaySpare(frame: i)
-                secondRoll = false
-                if (isStrikeA) {
-                    frameFirstScore[i-2][2] = num1
-                    printTotal(frame: i-1)
-                    isStrikeA = false
-                }
-                }
-            i += 1
-            prevRoll = 0
-        } else {
-            if (!secondRoll) {
-                roll1 = num1
-                frameFirstScore[i-1][0] = roll1
-                secondRoll = true
-                displayFirstScore (frame: i, roll: roll1)
-                  if (isStrikeA && isStrikeB) {
-                        frameFirstScore[i-2][1] = roll1
-                        frameFirstScore[i-3][2] = roll1
-                    printTotal(frame: i-2)
-                        isStrikeB = false
-                 } else if (isStrikeA) {
-                        frameFirstScore[i-2][1] = roll1
-                 } else if (isSpare) {
-                    frameFirstScore[i-2][2] = roll1
-                    isSpare = false 
-                    printTotal(frame: i-1)
-                 }
-           prevRoll = roll1
-            } else {
-                roll2 = num1
-                frameFirstScore[i-1][1] = roll2
-              if (isStrikeA) {
-                    frameFirstScore[i-2][2] = roll2
-                    isStrikeA = false
-                printTotal(frame: i-1)
-                 }
-                if frameFirstScore[i-1][0] + frameFirstScore [i-1][1] == 10 {
-                    displaySpare (frame: i)
-                    isSpare = true
+            if (!isGameOver && (num1 > 10-prevRoll || num1 < 0)) {
+                testLabel.alpha = 1
+                testLabel.text = "Score must be a number between 0 and \(10-prevRoll). Try again."
+            } else if (!isGameOver) {
+                testLabel.text = ""
+                testLabel.alpha = 0
+                if (i==10) {
+                    tenthFrame(num1: num1)
                 } else {
-                    displaySecondScore (frame: i, roll: roll2)
-                  printTotal(frame: i)
+                    if  num1 == 10 {
+                        if (!secondRoll) {
+                            frameFirstScore[i-1][0] = 10
+                            if (isStrikeA && isStrikeB) {
+                                frameFirstScore[i-2][1] = 10
+                                frameFirstScore[i-3][2] = 10
+                                printTotal(frame: i-2)
+                            } else if (isStrikeA) {
+                                isStrikeB = true
+                                frameFirstScore[i-2][1] = 10
+                            } else if (isSpare) {
+                                frameFirstScore[i-2][2] = 10
+                                isSpare = false
+                                printTotal(frame: i-1)
+                                isStrikeA = true
+                            } else {
+                                isStrikeA = true
+                            }
+                            displayStrike(frame: i)
+                        } else { //num is 10, and is a spare in second box
+                            frameFirstScore[i-1][1] = 10
+                            isSpare = true
+                            displaySpare(frame: i)
+                            secondRoll = false
+                            if (isStrikeA) {
+                                frameFirstScore[i-2][2] = num1
+                                printTotal(frame: i-1)
+                                isStrikeA = false
+                            }
+                        }
+                        i += 1
+                        prevRoll = 0
+                    } else {
+                        if (!secondRoll) {
+                            roll1 = num1
+                            frameFirstScore[i-1][0] = roll1
+                            secondRoll = true
+                            displayFirstScore (frame: i, roll: roll1)
+                            if (isStrikeA && isStrikeB) {
+                                frameFirstScore[i-2][1] = roll1
+                                frameFirstScore[i-3][2] = roll1
+                                printTotal(frame: i-2)
+                                isStrikeB = false
+                            } else if (isStrikeA) {
+                                frameFirstScore[i-2][1] = roll1
+                            } else if (isSpare) {
+                                frameFirstScore[i-2][2] = roll1
+                                isSpare = false
+                                printTotal(frame: i-1)
+                            }
+                            prevRoll = roll1
+                        } else {
+                            roll2 = num1
+                            frameFirstScore[i-1][1] = roll2
+                            if (isStrikeA) {
+                                frameFirstScore[i-2][2] = roll2
+                                isStrikeA = false
+                                printTotal(frame: i-1)
+                            }
+                            if frameFirstScore[i-1][0] + frameFirstScore [i-1][1] == 10 {
+                                displaySpare (frame: i)
+                                isSpare = true
+                            } else {
+                                displaySecondScore (frame: i, roll: roll2)
+                                printTotal(frame: i)
+                            }
+                            i += 1
+                            secondRoll = false
+                            prevRoll = 0
+                        }
+                    }
                 }
-                i += 1
-                secondRoll = false
-              prevRoll = 0
             }
-        }
-    }
-}
          } else {
             testLabel.alpha = 1
             testLabel.text = "Score must be a number between 0 and \(10-prevRoll). Try again."
-        }
-}
+            }
+    }
  
     func tenthFrame(num1: Int) {
         if (!isGameOver) {
@@ -326,12 +319,12 @@ class ViewController: UIViewController, UITextFieldDelegate {
         
             j += 1
             
-        if (j == rolls) {
-            isGameOver = true
-            gameOver()
-            printTotal(frame: i)
+            if (j == rolls) {
+                isGameOver = true
+                gameOver()
+                printTotal(frame: i)
+            }
         }
-    }
     }
 
      func displayStrikein10 (box: Int) {
@@ -360,6 +353,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
 
      func displayScorein10 (box: Int, score: Int) {
         var printItem = ""
+        
         if (score == 0) {
             printItem = "-"
         } else {
@@ -391,30 +385,21 @@ class ViewController: UIViewController, UITextFieldDelegate {
     }
     
     func gameOver() {
-       var message = "GAME OVER!"
-        
-
+        var message = "GAME OVER!"
         enterButton1.alpha = 0
-
         playAgainButton.alpha = 1
-        
-        
         compareScores(score: totalScores[10])
         
         message += " Your score for the game is "
-        
         message += "\(totalScores[10])"
-        
         message += ". Your high scores are: "
         
         for i in 1...10 {
             message += "(" + "\(i)" + ")" + " " + "\(highScoresArray[i-1]) "
         }
         message += ". Press play again for new game."
-        
         testLabel.alpha = 1
         testLabel.text = message
-        
         resetHighScores.alpha = 1
     
     }
@@ -504,6 +489,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
     }
     
     func displayFirstScore (frame: Int, roll: Int) {
+        
         var printItem = ""
         if (roll == 0) {
             printItem = "-"
@@ -514,7 +500,9 @@ class ViewController: UIViewController, UITextFieldDelegate {
     }
 
     func displaySecondScore (frame: Int, roll: Int) {
+        
         var printItem = ""
+        
         if (roll == 0) {
             printItem = "-"
         } else {
@@ -531,7 +519,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
         secondScoreLabelsArray[frame-1].text = "X"
     }
     
-    func displaySpare (frame: Int) {    //CHANGED
+    func displaySpare (frame: Int) {
         secondScoreLabelsArray[frame-1].text = "/"
     }
     
@@ -540,81 +528,68 @@ class ViewController: UIViewController, UITextFieldDelegate {
      displayTotalScore (frame: frame, score: totalScores[frame])
     }
     
-    func clearFirstScore () {         //CHANGED
+    func clearFirstScore () {
          for i in 1...9 {
             firstScoreLabelsArray[i-1].text = ""
          }
     }
 
-    func clearSecondScore () {        //CHANGED
+    func clearSecondScore () {
          for i in 1...9 {
             secondScoreLabelsArray[i-1].text = ""
          }
     }
     
-    func clearTotalScore () {     //CHANGED
+    func clearTotalScore () {
         for i in 1...10 {
             totalScoreLabelsArray[i-1].text = ""
         }
     }
     
-   
-    
    override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
     
-    playAgainButton.alpha = 0
-    resetHighScores.alpha = 0
-    resetYesButton.alpha = 0
-    resetNoButton.alpha = 0
+        playAgainButton.alpha = 0
+        resetHighScores.alpha = 0
+        resetYesButton.alpha = 0
+        resetNoButton.alpha = 0
 
-    // round corners of buttons
+        // round corners of buttons
     
-    playAgainButton.layer.cornerRadius = 5
-    playAgainButton.clipsToBounds = true
-    resetHighScores.layer.cornerRadius = 5
-    resetHighScores.clipsToBounds = true
-    resetYesButton.layer.cornerRadius = 5
-    resetYesButton.clipsToBounds = true
-    resetNoButton.layer.cornerRadius = 5
-    resetNoButton.clipsToBounds = true
-    enterButton1.layer.cornerRadius = 5
-    enterButton1.clipsToBounds = true
+        playAgainButton.layer.cornerRadius = 5
+        playAgainButton.clipsToBounds = true
+        resetHighScores.layer.cornerRadius = 5
+        resetHighScores.clipsToBounds = true
+        resetYesButton.layer.cornerRadius = 5
+        resetYesButton.clipsToBounds = true
+        resetNoButton.layer.cornerRadius = 5
+        resetNoButton.clipsToBounds = true
+        enterButton1.layer.cornerRadius = 5
+        enterButton1.clipsToBounds = true
     
+        firstScoreLabelsArray = [frame1Label1, frame2Label1, frame3Label1, frame4Label1, frame5Label1, frame6Label1, frame7Label1, frame8Label1, frame9Label1]
     
-    firstScoreLabelsArray = [frame1Label1, frame2Label1, frame3Label1, frame4Label1, frame5Label1, frame6Label1, frame7Label1, frame8Label1, frame9Label1]
+        secondScoreLabelsArray = [frame1Label2, frame2Label2, frame3Label2, frame4Label2, frame5Label2, frame6Label2, frame7Label2, frame8Label2, frame9Label2]
     
-    secondScoreLabelsArray = [frame1Label2, frame2Label2, frame3Label2, frame4Label2, frame5Label2, frame6Label2, frame7Label2, frame8Label2, frame9Label2]
+        totalScoreLabelsArray = [frame1LabelTS, frame2LabelTS, frame3LabelTS, frame4LabelTS, frame5LabelTS, frame6LabelTS, frame7LabelTS, frame8LabelTS, frame9LabelTS, frame10LabelTS]
     
-    totalScoreLabelsArray = [frame1LabelTS, frame2LabelTS, frame3LabelTS, frame4LabelTS, frame5LabelTS, frame6LabelTS, frame7LabelTS, frame8LabelTS, frame9LabelTS, frame10LabelTS]
-    
-    let arrayObject = UserDefaults.standard.object(forKey: "scores")
-    var array = [Int]()
-    
-    if let tempArray = arrayObject as? [Int] {
-    
-        array = tempArray
-    } else {
-    
- //       print("No array in storage, now saving one")
-        UserDefaults.standard.set(highScoresArray, forKey: "scores")
         let arrayObject = UserDefaults.standard.object(forKey: "scores")
-        
-        if (arrayObject as? [Int]) != nil {
-            array = arrayObject as! [Int]
-//            print("Array has been stored and retrieved")
-//            print(array)
-            
-        }
+        var array = [Int]()
     
-    }
-    highScoresArray = array     //cannot convert NSArray to Int (global array)
+        if let tempArray = arrayObject as? [Int] {
+            array = tempArray
+        } else {
+            UserDefaults.standard.set(highScoresArray, forKey: "scores")
+            let arrayObject = UserDefaults.standard.object(forKey: "scores")
+            if (arrayObject as? [Int]) != nil {
+                array = arrayObject as! [Int]
+            }
+        }
+        highScoresArray = array     //cannot convert NSArray to Int (global array)
     }
 
    override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
